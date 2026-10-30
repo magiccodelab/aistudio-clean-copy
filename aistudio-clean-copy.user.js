@@ -4,7 +4,7 @@
 // @name:zh           Google AI Studio 完整复制 Markdown
 // @name:zh-CN        Google AI Studio 完整复制 Markdown
 // @namespace         https://github.com/magiccodelab/aistudio-clean-copy
-// @version           1.2.2
+// @version           1.2.3
 // @description       One-click copy of a complete Google AI Studio reply as Markdown: body, citations, Sources. Unwraps google.com/url and vertexaisearch grounding redirects.
 // @description:en    One-click copy of a complete Google AI Studio reply as Markdown: body, citations, Sources. Unwraps google.com/url and vertexaisearch grounding redirects.
 // @description:zh    一键复制 Google AI Studio 完整回复为 Markdown：正文、文内引用、底部 Sources；还原 google.com/url 与 vertexaisearch 重定向。
@@ -367,24 +367,53 @@
 
   async function appendSources(md, turn) {
     const items = sourceItems(turn);
-    if (!items.length || /\n## Sources\s*\n/i.test(md)) return md;
+    if (!items.length || /\n## (?:Sources|来源)\s*\n/i.test(md)) return md;
     const lines = [];
     for (let i = 0; i < items.length; i++) {
       const url = (await resolveOne(items[i].href)) || items[i].href;
       const title = items[i].title.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
       lines.push((i + 1) + '. [' + title + '](' + url + ')');
     }
-    return md.replace(/\s+$/, '') + '\n\n## Sources\n\n' + lines.join('\n') + '\n';
+    return md.replace(/\s+$/, '') + '\n\n## ' + t.sources + '\n\n' + lines.join('\n') + '\n';
   }
 
-  function isZh() {
-    const lang = String(document.documentElement.lang || navigator.language || '').toLowerCase();
-    return lang.startsWith('zh');
+  function browserLangs() {
+    const list = [];
+    try {
+      if (Array.isArray(navigator.languages)) list.push(...navigator.languages);
+    } catch {}
+    try {
+      if (navigator.language) list.push(navigator.language);
+    } catch {}
+    try {
+      if (W.navigator && W.navigator.language) list.push(W.navigator.language);
+    } catch {}
+    return list.map((s) => String(s || '').toLowerCase());
   }
 
-  function msg(zh, en) {
-    return isZh() ? zh : en;
+  function isZhBrowser() {
+    return browserLangs().some((l) => l === 'zh' || l.startsWith('zh-'));
   }
+
+  const I18N = {
+    en: {
+      btn: 'Copy Markdown',
+      copying: 'Copying…',
+      copied: 'Copied',
+      empty: 'Nothing to copy',
+      fail: 'Copy failed',
+      sources: 'Sources',
+    },
+    zh: {
+      btn: '复制 Markdown',
+      copying: '正在复制…',
+      copied: '已复制',
+      empty: '没有可复制的内容',
+      fail: '复制失败',
+      sources: '来源',
+    },
+  };
+  const t = I18N[isZhBrowser() ? 'zh' : 'en'];
 
   function copyText(text) {
     try { GM_setClipboard(String(text), 'text'); } catch {}
@@ -395,14 +424,14 @@
     return Promise.resolve();
   }
 
-  function toast(msg, kind) {
+  function toast(text, kind) {
     let el = document.getElementById('ais-clean-copy-toast');
     if (!el) {
       el = document.createElement('div');
       el.id = 'ais-clean-copy-toast';
       document.documentElement.appendChild(el);
     }
-    el.textContent = msg;
+    el.textContent = text;
     el.dataset.kind = kind || 'ok';
     el.dataset.show = '1';
     clearTimeout(toast._t);
@@ -417,19 +446,19 @@
 
   async function copyTurn(turn, btn) {
     setBtnState(btn, 'hourglass_empty', true);
-    toast(msg('正在复制…', 'Copying…'), 'busy');
+    toast(t.copying, 'busy');
     try {
       let md = getTurnMarkdown(turn);
-      if (!md.trim()) throw new Error(msg('没有可复制的内容', 'Nothing to copy'));
+      if (!md.trim()) throw new Error(t.empty);
       md = await resolveText(md);
       md = await appendSources(md, turn);
       await copyText(md);
       setBtnState(btn, 'check', false);
-      toast(msg('已复制', 'Copied'));
+      toast(t.copied);
     } catch (e) {
       console.warn('[ais-clean-copy]', e);
       setBtnState(btn, 'error', false);
-      toast((e && e.message) || msg('复制失败', 'Copy failed'), 'err');
+      toast(t.fail, 'err');
     }
     setTimeout(() => setBtnState(btn, 'markdown_copy', false), 1200);
   }
@@ -440,8 +469,8 @@
     btn.className = 'mat-mdc-tooltip-trigger ms-button-borderless ms-button-icon ' + BTN_CLASS;
     btn.setAttribute('ms-button', '');
     btn.setAttribute('variant', 'icon-borderless');
-    btn.setAttribute('aria-label', msg('复制 Markdown', 'Copy Markdown'));
-    btn.title = msg('复制 Markdown', 'Copy Markdown');
+    btn.setAttribute('aria-label', t.btn);
+    btn.title = t.btn;
     const icon = document.createElement('span');
     icon.className = 'material-symbols-outlined notranslate ms-button-icon-symbol';
     icon.setAttribute('aria-hidden', 'true');

@@ -52,6 +52,8 @@ Resolved URLs are cached in the userscript store (24h).
 3. Click the green Markdown icon.
 4. Toast: **Copying…** → **Copied**. Paste anywhere.
 
+Button, toast, and the `## Sources` heading follow the **browser language** (`zh*` → Chinese, otherwise English). The AI Studio page language is ignored.
+
 User turns are left unchanged. Thoughts / search chips are not copied.
 
 ## Permissions
