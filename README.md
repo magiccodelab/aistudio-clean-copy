@@ -47,7 +47,7 @@ Resolved URLs are cached in the userscript store (24h).
 
 ## Usage
 
-1. Open a prompt on `aistudio.google.com`.
+1. Open a prompt at `https://aistudio.google.com/prompts/...`.
 2. Hover a **model** reply.
 3. Click the green Markdown icon.
 4. Toast: **Copying…** → **Copied**. Paste anywhere.
@@ -64,7 +64,12 @@ User turns are left unchanged. Thoughts / search chips are not copied.
 | `GM_addStyle` | Button + toast |
 | `@connect *` | First hop is Vertex; `Location` may point at any host if the manager follows redirects |
 
-The script only runs on `https://aistudio.google.com/*`.
+The script only runs on prompt pages:
+
+- `https://aistudio.google.com/prompts/*`
+- `https://aistudio.google.com/u/*/prompts/*` (multi-account)
+
+It does not inject on Library, Apps, Docs, or API key pages.
 
 ## License
 

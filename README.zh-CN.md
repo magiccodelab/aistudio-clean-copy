@@ -49,7 +49,7 @@
 
 ## 用法
 
-1. 打开 `aistudio.google.com` 里的对话。
+1. 打开 `https://aistudio.google.com/prompts/...` 里的对话（含历史对话）。
 2. 悬停在**模型回复**上。
 3. 点绿色 Markdown 图标。
 4. 右下角提示：**正在复制…** → **已复制**。直接粘贴即可。
@@ -66,7 +66,12 @@
 | `GM_addStyle` | 按钮和提示 |
 | `@connect *` | 第一跳是 Vertex；若管理器跟随跳转，`Location` 可能指向任意站点 |
 
-脚本只匹配 `https://aistudio.google.com/*`。
+脚本只匹配对话页：
+
+- `https://aistudio.google.com/prompts/*`
+- `https://aistudio.google.com/u/*/prompts/*`（多账号）
+
+Library、应用、文档、API key 页不会注入。
 
 ## 许可证
 

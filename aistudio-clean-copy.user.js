@@ -3,7 +3,7 @@
 // @name:zh           Google AI Studio 完整复制 Markdown
 // @name:zh-CN        Google AI Studio 完整复制 Markdown
 // @namespace         https://github.com/magiccodelab/aistudio-clean-copy
-// @version           1.2.0
+// @version           1.2.1
 // @description       One-click copy of a complete Google AI Studio reply as Markdown: body, citations, Sources. Unwraps google.com/url and vertexaisearch grounding redirects.
 // @description:zh    一键复制 Google AI Studio 完整回复为 Markdown：正文、文内引用、底部 Sources；还原 google.com/url 与 vertexaisearch 重定向。
 // @description:zh-CN 一键复制 Google AI Studio 完整回复为 Markdown：正文、文内引用、底部 Sources；还原 google.com/url 与 vertexaisearch 重定向。
@@ -13,7 +13,8 @@
 // @supportURL        https://github.com/magiccodelab/aistudio-clean-copy/issues
 // @downloadURL       https://raw.githubusercontent.com/magiccodelab/aistudio-clean-copy/main/aistudio-clean-copy.user.js
 // @updateURL         https://raw.githubusercontent.com/magiccodelab/aistudio-clean-copy/main/aistudio-clean-copy.user.js
-// @match             https://aistudio.google.com/*
+// @match             https://aistudio.google.com/prompts/*
+// @match             https://aistudio.google.com/u/*/prompts/*
 // @run-at            document-idle
 // @grant             GM_xmlhttpRequest
 // @grant             GM_setClipboard
@@ -27,6 +28,7 @@
 (() => {
   'use strict';
   if (window.top !== window.self) return;
+  if (!/^\/(?:u\/\d+\/)?prompts\//.test(location.pathname)) return;
 
   const W = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window;
   const CONCURRENCY = 8;
