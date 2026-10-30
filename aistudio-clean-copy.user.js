@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name              Google AI Studio Clean Copy Markdown
+// @name:en           Google AI Studio Clean Copy Markdown
 // @name:zh           Google AI Studio 完整复制 Markdown
 // @name:zh-CN        Google AI Studio 完整复制 Markdown
 // @namespace         https://github.com/magiccodelab/aistudio-clean-copy
-// @version           1.2.1
+// @version           1.2.2
 // @description       One-click copy of a complete Google AI Studio reply as Markdown: body, citations, Sources. Unwraps google.com/url and vertexaisearch grounding redirects.
+// @description:en    One-click copy of a complete Google AI Studio reply as Markdown: body, citations, Sources. Unwraps google.com/url and vertexaisearch grounding redirects.
 // @description:zh    一键复制 Google AI Studio 完整回复为 Markdown：正文、文内引用、底部 Sources；还原 google.com/url 与 vertexaisearch 重定向。
 // @description:zh-CN 一键复制 Google AI Studio 完整回复为 Markdown：正文、文内引用、底部 Sources；还原 google.com/url 与 vertexaisearch 重定向。
 // @author            afeng (magiccodelab)
